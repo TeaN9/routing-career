@@ -1,5 +1,4 @@
 import React from "react";
-import jobs from "../jobs.json";
 import { useParams } from "react-router-dom";
 import {
   Box,
