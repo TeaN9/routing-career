@@ -13,7 +13,6 @@ import { FormProvider, FTextField, FCheckbox } from "../components/form/index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuthenticationContext } from "../context/Auth";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -41,18 +40,20 @@ function SignInPage() {
 
   const { handleLogIn } = useAuthenticationContext();
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from || "/";
-
   const onSubmit = (data, event) => {
     event.preventDefault();
     handleLogIn(defaultValues);
-    navigate(from, { replace: true });
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Typography variant="h3" textAlign="center" mb={3}>
         LOG IN
       </Typography>
