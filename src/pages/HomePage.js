@@ -1,14 +1,17 @@
 import {
+  Backdrop,
   Box,
   CircularProgress,
   Container,
   Grid,
+  Modal,
   Pagination,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import JobCard from "../components/JobCard";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import { appPaths } from "../Constant";
 
 function HomePage() {
   const [jobs, setJobs] = useState(null);
@@ -16,16 +19,10 @@ function HomePage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const elementsPerPage = 20;
-  const numPages = Math.ceil(jobs.length / elementsPerPage);
+  const elementsPerPage = 12;
 
-  const handleClick = (event, value) => {
-    setPage(value);
-  };
-
-  const startIndex = (page - 1) * elementsPerPage;
-  const endIndex = startIndex + elementsPerPage;
-  const displayedJobs = jobs.slice(startIndex, endIndex);
+  const [openModal, setOpenModal] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,16 +46,33 @@ function HomePage() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (location.pathname === appPaths.jobDetail) {
+      setOpenModal(true);
+    } else {
+      setOpenModal(false);
+    }
+  }, [location]);
+
+  const numPages = jobs ? Math.ceil(jobs.length / elementsPerPage) : 0;
+
+  const handleClick = (event, value) => {
+    setPage(value);
+  };
+
+  const startIndex = (page - 1) * elementsPerPage;
+  const endIndex = startIndex + elementsPerPage;
+  const displayedJobs = jobs ? jobs.slice(startIndex, endIndex) : [];
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
       {loading ? (
         <Box>
-          <CircularProgress
-            determinate={false}
-            size="lg"
-            value={25}
-            variant="plain"
-          />
+          <CircularProgress size="lg" value={25} />
         </Box>
       ) : errorMessage ? (
         <Box>
@@ -89,7 +103,17 @@ function HomePage() {
               />
             </Box>
           </Container>
-          <Outlet />
+          <Modal
+            open={openModal}
+            onClose={handleCloseModal}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+              style: { backgroundColor: "rgba(0, 0, 0, 0.8)" },
+            }}
+          >
+            <Outlet />
+          </Modal>
         </>
       )}
     </>

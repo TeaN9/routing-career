@@ -13,6 +13,7 @@ import { FormProvider, FTextField, FCheckbox } from "../components/form/index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAuthenticationContext } from "../context/Auth";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -40,9 +41,16 @@ function SignInPage() {
 
   const { handleLogIn } = useAuthenticationContext();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get redirect location or provide fallback
+  const from = location.state?.from || "/";
+
   const onSubmit = (data, event) => {
     event.preventDefault();
     handleLogIn(defaultValues);
+    navigate(from, { replace: true });
   };
 
   return (

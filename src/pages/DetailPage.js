@@ -23,9 +23,6 @@ function DetailPage() {
   const params = useParams();
   const jobId = params.id;
 
-  const skillSet = jobDetail.skills;
-  const formattedDate = format(new Date(jobDetail.postedDate), "MMM-do, yyyy");
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -49,31 +46,31 @@ function DetailPage() {
     fetchData();
   }, [jobId]);
 
+  const skillSet = jobDetail ? jobDetail.skills : [];
+  const formattedDate = jobDetail
+    ? format(new Date(jobDetail.postedDate), "MMM-do, yyyy")
+    : "";
+
   return (
     <>
       {loading ? (
         <Box>
-          <CircularProgress
-            determinate={false}
-            size="lg"
-            value={25}
-            variant="plain"
-          />
+          <CircularProgress size="md" value={25} />
         </Box>
       ) : errorMessage ? (
         <Box>
           <Typography level="h2">{errorMessage}</Typography>
         </Box>
       ) : (
-        <Container sx={{ maxWidth: "800px" }}>
+        <Container sx={{ maxWidth: "600px" }}>
           <Typography variant="h3" marginTop={3}>
-            {jobDetail.title}
+            {jobDetail?.title}
           </Typography>
           <Divider />
           <Box display="flex" alignItems="center" marginTop={1}>
             <WalletIcon />
             <Typography variant="subtitile2" paddingLeft={1}>
-              {jobDetail.salaryLow} - {jobDetail.salaryHigh} $
+              {jobDetail?.salaryLow} - {jobDetail?.salaryHigh} $
             </Typography>
           </Box>
           <Box display="flex" alignItems="center" marginTop={1}>
@@ -85,19 +82,19 @@ function DetailPage() {
           <Box display="flex" alignItems="center" marginTop={1}>
             <LocationCityIcon />
             <Typography variant="subtitile2" paddingLeft={1}>
-              Working Location: {jobDetail.city}
+              Working Location: {jobDetail?.city}
             </Typography>
           </Box>
           <Box display="flex" alignItems="center" marginTop={1}>
             <ScienceIcon />
             <Typography variant="subtitile2" paddingLeft={1}>
-              Experience: {jobDetail.yrsXPExpected} years
+              Experience: {jobDetail?.yrsXPExpected} years
             </Typography>
           </Box>
           <Divider />
 
           <Typography variant="body1" marginTop={2} marginBottom={2}>
-            {jobDetail.description}
+            {jobDetail?.description}
           </Typography>
           <Divider />
           <Stack
@@ -113,7 +110,7 @@ function DetailPage() {
           </Stack>
 
           <Box marginTop={3}>
-            {jobDetail.remote ? (
+            {jobDetail?.remote ? (
               <Chip label="Remote working" variant="outlined" color="success" />
             ) : (
               <Chip label="Remote working" variant="outlined" color="error" />
