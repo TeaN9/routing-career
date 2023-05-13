@@ -7,13 +7,7 @@ export const AuthenticateRoute = ({ children }) => {
   const { isLoggedIn } = useAuthenticationContext();
   const location = useLocation();
   if (!isLoggedIn) {
-    return (
-      <Navigate
-        to={appPaths.signIn}
-        state={{ from: location.pathname }}
-        replace
-      />
-    );
+    return <Navigate to={appPaths.signIn} state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

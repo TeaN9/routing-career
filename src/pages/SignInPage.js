@@ -43,6 +43,8 @@ function SignInPage() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Get redirect location or provide fallback
   const from = location.state?.from || "/";
 
   const onSubmit = (data, event) => {
@@ -52,7 +54,14 @@ function SignInPage() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Typography variant="h3" textAlign="center" mb={3}>
         LOG IN
       </Typography>
