@@ -5,7 +5,7 @@ import jobs from "../jobs.json";
 
 function HomePage() {
   const [page, setPage] = useState(1);
-  const elementsPerPage = 5; // Display 5 elements per page
+  const elementsPerPage = 12; // Display 12 elements per page
   const numPages = Math.ceil(jobs.length / elementsPerPage);
 
   const handleClick = (event, value) => {
