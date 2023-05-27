@@ -60,10 +60,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
-  const { isLoggedIn, handleLogout, user } = useAuthenticationContext();
+  const { isLoggedIn, handleLogout, user, handleOpenModal } =
+    useAuthenticationContext();
   const navigate = useNavigate();
 
-  const action = isLoggedIn ? handleLogout : () => navigate(appPaths.signIn);
+  const action = isLoggedIn
+    ? handleLogout
+    : () => {
+        handleOpenModal();
+        navigate(appPaths.signIn);
+      };
 
   return (
     <Box sx={{ flexGrow: 1 }}>

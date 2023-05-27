@@ -6,12 +6,16 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Chip, Divider, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAuthenticationContext } from "../context/Auth";
 
 export default function JobCard({ job }) {
   const skillSetOf4 = job.skills.slice(0, 4);
   const navigate = useNavigate();
 
+  const { handleOpenModal } = useAuthenticationContext();
+
   const handleJobClick = (e) => {
+    handleOpenModal();
     navigate(`/job/${job.id}`);
   };
 
@@ -37,7 +41,7 @@ export default function JobCard({ job }) {
             <Chip key={index} label={skill} color="secondary" clickable />
           ))}
         </Stack>
-        <Typography variant="body2" marginTop={2}>
+        <Typography variant="body2" marginTop={2} textAlign="justify">
           {job.description}
         </Typography>
       </CardContent>

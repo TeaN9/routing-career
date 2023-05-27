@@ -93,7 +93,12 @@ function DetailPage() {
           </Box>
           <Divider />
 
-          <Typography variant="body1" marginTop={2} marginBottom={2}>
+          <Typography
+            variant="body1"
+            marginTop={2}
+            marginBottom={2}
+            textAlign="justify"
+          >
             {jobDetail?.description}
           </Typography>
           <Divider />

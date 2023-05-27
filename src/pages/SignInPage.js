@@ -44,7 +44,6 @@ function SignInPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get redirect location or provide fallback
   const from = location.state?.from || "/";
 
   const onSubmit = (data, event) => {

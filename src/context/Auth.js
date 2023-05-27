@@ -18,6 +18,10 @@ export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
   const handleLogIn = (data) => {
     setUser(data);
     setIsLoggedIn(true);
@@ -35,6 +39,9 @@ export const AuthContextProvider = ({ children }) => {
         user,
         handleLogIn,
         handleLogout,
+        openModal,
+        handleOpenModal,
+        handleCloseModal,
       }}
     >
       {children}

@@ -1,5 +1,4 @@
 import {
-  Backdrop,
   Box,
   CircularProgress,
   Container,
@@ -10,14 +9,42 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import JobCard from "../components/JobCard";
-import { Outlet, useLocation } from "react-router-dom";
-import { appPaths } from "../Constant";
+import { Outlet } from "react-router-dom";
+import { useAuthenticationContext } from "../context/Auth";
 
 function HomePage() {
   const [jobs, setJobs] = useState(null);
   const [page, setPage] = useState(1);
-  const elementsPerPage = 5; // Display 5 elements per page
-  const numPages = Math.ceil(jobs.length / elementsPerPage);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const elementsPerPage = 12;
+
+  const { openModal, handleCloseModal } = useAuthenticationContext();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const url = "http://localhost:7000/jobs"; // json-server --port 7000
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          setJobs(data);
+          setErrorMessage("");
+        } else {
+          setErrorMessage(data.message);
+        }
+      } catch (err) {
+        setErrorMessage(err.message);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const numPages = jobs ? Math.ceil(jobs.length / elementsPerPage) : 0;
 
   const handleClick = (event, value) => {
     setPage(value);
@@ -26,10 +53,6 @@ function HomePage() {
   const startIndex = (page - 1) * elementsPerPage;
   const endIndex = startIndex + elementsPerPage;
   const displayedJobs = jobs ? jobs.slice(startIndex, endIndex) : [];
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
 
   return (
     <>
@@ -66,16 +89,22 @@ function HomePage() {
               />
             </Box>
           </Container>
-          <Modal
-            open={openModal}
-            onClose={handleCloseModal}
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-              timeout: 500,
-              style: { backgroundColor: "rgba(0, 0, 0, 0.8)" },
-            }}
-          >
-            <Outlet />
+          <Modal open={openModal} onClose={handleCloseModal}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                maxwidth: 800,
+                bgcolor: "background.paper",
+                border: "2px solid #000",
+                boxShadow: 24,
+                p: 2,
+              }}
+            >
+              <Outlet />
+            </Box>
           </Modal>
         </>
       )}
